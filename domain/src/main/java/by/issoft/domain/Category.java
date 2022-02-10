@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Category {
-    private String name;
-    private List<Product> productList;
+    public String getName() {
+        return name;
+    }
+
+    private final String name;
+    private final List<Product> productList;
 
     public Category(String name) {
         this.name = name;
