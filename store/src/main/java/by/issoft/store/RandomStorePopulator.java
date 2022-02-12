@@ -15,6 +15,9 @@ public class RandomStorePopulator {
     private final static int LOWER_BOUND = 3;
     private final static int BOUND = 5;
     private final static String PACKAGE = "by.issoft.domain.categories";
+    private final static String BIKE_CATEGORY = "Bike";
+    private final static String MILK_CATEGORY = "Milk";
+    private final static String PHONE_CATEGORY = "Phone";
 
     public RandomStorePopulator() {
         faker = new Faker();
@@ -37,10 +40,23 @@ public class RandomStorePopulator {
 
     private Category addProductsToCategory(Category category, int num) {
         for (int i = 0; i < num; i++) {
-            category.addProduct(new Product(category.getName() + " " + faker.company().name(),
+            category.addProduct(new Product(generateProductName(category),
                     faker.number().randomDouble(1, 0, 10),
                     Double.parseDouble(faker.commerce().price())));
         }
         return category;
+    }
+
+    private String generateProductName(Category category) {
+        switch (category.getName()) {
+            case BIKE_CATEGORY:
+                return faker.company().name();
+            case MILK_CATEGORY:
+                return faker.food().ingredient();
+            case PHONE_CATEGORY:
+                return faker.app().name();
+            default:
+                return faker.funnyName().name();
+        }
     }
 }
