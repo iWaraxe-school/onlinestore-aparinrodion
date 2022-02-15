@@ -2,8 +2,8 @@ package by.issoft.domain;
 
 public class Product {
     private final String name;
-    private Double rate;
-    private Double price;
+    private final Double rate;
+    private final Double price;
 
     public Product(String name, Double rate, Double price) {
         this.name = name;
@@ -13,7 +13,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return "name: " + name + ", rate: " + rate + " price: " + price;
+        return String.format("Name: '%s', Price: %.2f, Rate: %.1f", name, price, rate);
     }
 
     public String getName() {
@@ -26,13 +26,5 @@ public class Product {
 
     public Double getPrice() {
         return price;
-    }
-
-    public void setRate(Double rate) {
-        this.rate = rate;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
     }
 }
