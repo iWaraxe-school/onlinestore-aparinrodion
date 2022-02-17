@@ -29,7 +29,9 @@ public class XMLReader {
             NodeList elements = root.getChildNodes();
             for (int i = 0; i < elements.getLength(); i++) {
                 Node element = elements.item(i);
-                sortingRules.put(element.getNodeName(), element.getTextContent());
+                if (element.getNodeType() == Node.ELEMENT_NODE) {
+                    sortingRules.put(element.getNodeName(), element.getTextContent());
+                }
             }
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
