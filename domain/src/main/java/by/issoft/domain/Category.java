@@ -29,4 +29,8 @@ public class Category {
         }
         return stringBuilder.toString();
     }
+
+    public List<Product> getProductList() {
+        return productList;
+    }
 }
