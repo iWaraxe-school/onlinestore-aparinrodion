@@ -8,6 +8,8 @@ public class StoreApp {
         Store store = new Store();
         RandomStorePopulator randomStorePopulator = new RandomStorePopulator();
         randomStorePopulator.fillStore(store);
-        System.out.print(store);
+
+        ConsoleReader consoleReader = new ConsoleReader(store, System.in);
+        consoleReader.start();
     }
 }
