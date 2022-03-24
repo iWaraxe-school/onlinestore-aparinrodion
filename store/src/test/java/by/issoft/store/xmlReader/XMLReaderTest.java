@@ -1,5 +1,6 @@
 package by.issoft.store.xmlReader;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.LinkedHashMap;
@@ -19,6 +20,10 @@ class XMLReaderTest {
     private static final String TEST_FILE_2 = "configFileTest2.xml";
     private static final String TEST_FILE_3 = "configFileTest3.xml";
 
+    @AfterEach
+    private void setDefaultConfigFile(){
+        XMLReader.setConfigFile(DEFAULT_CONFIG_FILE);
+    }
 
     @Test
     void getConfigFile() {
@@ -30,8 +35,6 @@ class XMLReaderTest {
         String newConfigFile = "new_config.xml";
         XMLReader.setConfigFile(newConfigFile);
         assertEquals(newConfigFile, XMLReader.getConfigFile());
-
-        XMLReader.setConfigFile(DEFAULT_CONFIG_FILE);
     }
 
     @Test
@@ -55,8 +58,6 @@ class XMLReaderTest {
         sortingRules3.put(RATE, DESCENDING);
         XMLReader.setConfigFile(TEST_FILE_3);
         assertEquals(sortingRules3, XMLReader.getSortingRulesFromXML());
-
-        XMLReader.setConfigFile(DEFAULT_CONFIG_FILE);
     }
 
     @Test
@@ -64,6 +65,5 @@ class XMLReaderTest {
         Map<String, String> emptyMap = new LinkedHashMap<>();
         XMLReader.setConfigFile("Wrong config file");
         assertEquals(emptyMap, XMLReader.getSortingRulesFromXML());
-        XMLReader.setConfigFile(DEFAULT_CONFIG_FILE);
     }
 }
