@@ -6,13 +6,20 @@ import by.issoft.domain.Product;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Store {
     private final List<Category> categoryList;
+    private static Store storeInstance;
 
-    public Store() {
+    private Store() {
         categoryList = new ArrayList<>();
+    }
+
+    public static Store getInstance() {
+        if (storeInstance == null) {
+            storeInstance = new Store();
+        }
+        return storeInstance;
     }
 
     public void addCategory(Category category) {
