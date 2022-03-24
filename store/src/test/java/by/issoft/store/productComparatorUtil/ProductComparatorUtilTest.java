@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ProductComparatorUtilTest {
     private static final String NAME = "name";
@@ -22,7 +22,7 @@ class ProductComparatorUtilTest {
     private Map<String, String> sortingRules;
 
     @BeforeAll
-    static void fillProduct() {
+    static void Fill_products() {
         productList.add(new Product("a", 5.6, 50.));
         productList.add(new Product("a1", 5.6, 51.));
         productList.add(new Product("b", 5.4, 51.));
@@ -32,7 +32,7 @@ class ProductComparatorUtilTest {
     }
 
     @Test
-    void comparingByNameDescendingTest() {
+    void Create_comparator_by_descending_name() {
         sortingRules = new LinkedHashMap<>();
         sortingRules.put(NAME, DESCENDING);
         myComparator = Comparator.comparing(Product::getName, Comparator.reverseOrder());
@@ -42,7 +42,7 @@ class ProductComparatorUtilTest {
     }
 
     @Test
-    void comparingByNameAscendingTest() {
+    void Create_comparator_by_ascending_name() {
         sortingRules = new LinkedHashMap<>();
         sortingRules.put(NAME, ASCENDING);
         myComparator = Comparator.comparing(Product::getName);
@@ -52,7 +52,7 @@ class ProductComparatorUtilTest {
     }
 
     @Test
-    void comparingByPriceDescendingTest() {
+    void Create_comparator_by_descending_price() {
         sortingRules = new LinkedHashMap<>();
         sortingRules.put(PRICE, DESCENDING);
         myComparator = Comparator.comparing(Product::getPrice, Comparator.reverseOrder());
@@ -62,7 +62,7 @@ class ProductComparatorUtilTest {
     }
 
     @Test
-    void comparingByPriceAscendingTest() {
+    void Create_comparator_by_ascending_price() {
         sortingRules = new LinkedHashMap<>();
         sortingRules.put(PRICE, ASCENDING);
         myComparator = Comparator.comparing(Product::getPrice);
@@ -73,7 +73,7 @@ class ProductComparatorUtilTest {
 
 
     @Test
-    void comparingByRateDescendingTest() {
+    void Create_comparator_by_descending_rate() {
         sortingRules = new LinkedHashMap<>();
         sortingRules.put(RATE, DESCENDING);
         myComparator = Comparator.comparing(Product::getRate, Comparator.reverseOrder());
@@ -83,7 +83,7 @@ class ProductComparatorUtilTest {
     }
 
     @Test
-    void comparingByRateAscendingTest() {
+    void Create_comparator_by_ascending_rate() {
         sortingRules = new LinkedHashMap<>();
         sortingRules.put(RATE, ASCENDING);
         myComparator = Comparator.comparing(Product::getRate);
@@ -93,7 +93,7 @@ class ProductComparatorUtilTest {
     }
 
     @Test
-    void comparingByMultipleTest() {
+    void Create_comparator_by_multiple_params() {
         sortingRules = new LinkedHashMap<>();
         sortingRules.put(RATE, ASCENDING);
         sortingRules.put(PRICE, DESCENDING);
@@ -111,9 +111,18 @@ class ProductComparatorUtilTest {
     }
 
     @Test
-    void when_map_is_wrong() {
+    void Create_comparator_when_map_is_wrong_Should_return_comparator_by_name() {
         sortingRules = new LinkedHashMap<>();
         sortingRules.put("wrong", ASCENDING);
+        myComparator = Comparator.comparing(Product::getName);
+        comparator = ProductComparatorUtil.createComparator(sortingRules);
+        assertEquals(productList.stream().sorted(myComparator).collect(Collectors.toList()),
+                productList.stream().sorted(comparator).collect(Collectors.toList()));
+    }
+
+    @Test
+    void Create_comparator_when_map_is_empty_Should_return_comparator_by_name() {
+        sortingRules = new LinkedHashMap<>();
         myComparator = Comparator.comparing(Product::getName);
         comparator = ProductComparatorUtil.createComparator(sortingRules);
         assertEquals(productList.stream().sorted(myComparator).collect(Collectors.toList()),

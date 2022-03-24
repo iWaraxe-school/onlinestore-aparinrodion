@@ -34,8 +34,8 @@ public class ConsoleReader {
             String message = scanner.nextLine();
             switch (message) {
                 case SORT_COMMAND: {
-                    System.out.print(store.getSortedStore(
-                            ProductComparatorUtil.createComparator(XMLReader.getSortingRulesFromXML())));
+                    System.out.print(store
+                            .getSortedStore(ProductComparatorUtil.createComparator(XMLReader.getSortingRulesFromXML())));
                     break;
                 }
                 case TOP_COMMAND: {

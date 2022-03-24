@@ -21,24 +21,24 @@ class XMLReaderTest {
     private static final String TEST_FILE_3 = "configFileTest3.xml";
 
     @AfterEach
-    private void setDefaultConfigFile(){
+    private void Set_default_config_file(){
         XMLReader.setConfigFile(DEFAULT_CONFIG_FILE);
     }
 
     @Test
-    void getConfigFile() {
+    void Get_config_file() {
         assertEquals(DEFAULT_CONFIG_FILE, XMLReader.getConfigFile());
     }
 
     @Test
-    void setConfigFile() {
+    void Set_config_file() {
         String newConfigFile = "new_config.xml";
         XMLReader.setConfigFile(newConfigFile);
         assertEquals(newConfigFile, XMLReader.getConfigFile());
     }
 
     @Test
-    void getSortingRulesFromXML() {
+    void Get_sorting_rules_from_XML() {
         Map<String, String> sortingRules1 = new LinkedHashMap<>();
         sortingRules1.put(RATE, DESCENDING);
         sortingRules1.put(PRICE, ASCENDING);
@@ -61,7 +61,7 @@ class XMLReaderTest {
     }
 
     @Test
-    void emptyMap_when_url_wrong() {
+    void Get_sorting_rules_when_config_file_is_wrong() {
         Map<String, String> emptyMap = new LinkedHashMap<>();
         XMLReader.setConfigFile("Wrong config file");
         assertEquals(emptyMap, XMLReader.getSortingRulesFromXML());

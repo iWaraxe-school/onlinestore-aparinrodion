@@ -11,22 +11,22 @@ class ProductTest {
     private static final Product product = new Product(NAME, RATE, PRICE);
 
     @Test
-    void getName() {
+    void Get_name() {
         assertEquals(product.getName(), NAME);
     }
 
     @Test
-    void getRate() {
+    void Get_rate() {
         assertEquals(product.getRate(), RATE);
     }
 
     @Test
-    void getPrice() {
+    void Get_price() {
         assertEquals(product.getPrice(), PRICE);
     }
 
     @Test
-    void toStringTest() {
+    void To_string() {
         assertEquals(String.format("Name: '%s', Price: %.2f, Rate: %.1f", NAME, PRICE, RATE), product.toString());
     }
 }

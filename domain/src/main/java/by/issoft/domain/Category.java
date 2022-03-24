@@ -31,11 +31,11 @@ public class Category {
 
     public String getSortedProducts(Comparator<Product> comparator) {
         StringBuilder stringBuilder = new StringBuilder("Category: " + name + "\nProducts:\n");
-        getSortedProduct(comparator).forEach(product -> stringBuilder.append(product).append("\n"));
+        getSortedProductsList(comparator).forEach(product -> stringBuilder.append(product).append("\n"));
         return stringBuilder.toString();
     }
 
-    public List<Product> getSortedProduct(Comparator<Product> comparator) {
+    public List<Product> getSortedProductsList(Comparator<Product> comparator) {
         return productList.stream().sorted(comparator).collect(Collectors.toList());
     }
 

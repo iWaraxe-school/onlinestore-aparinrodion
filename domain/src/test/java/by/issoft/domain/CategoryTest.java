@@ -10,7 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CategoryTest {
 
@@ -61,7 +61,7 @@ class CategoryTest {
                 .thenComparing(Product::getPrice)
                 .thenComparing(Product::getPrice, Comparator.reverseOrder());
         assertEquals(productList.stream().sorted(comparator).collect(Collectors.toList()),
-                category.getSortedProduct(comparator));
+                category.getSortedProductsList(comparator));
     }
 
     @Test
