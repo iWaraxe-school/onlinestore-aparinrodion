@@ -14,13 +14,17 @@ public class ProductComparatorUtil {
     public static final String DESCENDING = "desc";
 
     public static Comparator<Product> createComparator(Map<String, String> sortingRules) {
-        List<Map.Entry<String, String>> listOfRules = new ArrayList<>();
-        sortingRules.entrySet().forEach(listOfRules::add);
-        Comparator<Product> comparator = createComparator(listOfRules.get(0));
-        for (int i = 1; i < listOfRules.size(); i++) {
-            comparator = createComparatorFromExisting(comparator, listOfRules.get(i));
+        if (!sortingRules.isEmpty()) {
+            List<Map.Entry<String, String>> listOfRules = new ArrayList<>();
+            sortingRules.entrySet().forEach(listOfRules::add);
+            Comparator<Product> comparator = createComparator(listOfRules.get(0));
+            for (int i = 1; i < listOfRules.size(); i++) {
+                comparator = createComparatorFromExisting(comparator, listOfRules.get(i));
+            }
+            return comparator;
         }
-        return comparator;
+        return Comparator.comparing(Product::getName);
+
     }
 
     private static Comparator<Product> createComparator(Map.Entry<String, String> firstElement) {

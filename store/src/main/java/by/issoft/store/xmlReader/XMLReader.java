@@ -14,13 +14,21 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class XMLReader {
-    private static final String FILE = "config.xml";
+    private static String configFile = "config.xml";
+
+    public static void setConfigFile(String configFile) {
+        XMLReader.configFile = configFile;
+    }
+
+    public static String getConfigFile() {
+        return configFile;
+    }
 
     public static Map<String, String> getSortingRulesFromXML() {
         Map<String, String> sortingRules = new LinkedHashMap<>();
         try {
             DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            URL url = XMLReader.class.getClassLoader().getResource(FILE);
+            URL url = XMLReader.class.getClassLoader().getResource(configFile);
             if (url == null) {
                 return sortingRules;
             }
