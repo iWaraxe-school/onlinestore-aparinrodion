@@ -10,23 +10,21 @@ import java.util.stream.Collectors;
 
 public class Store {
     private final List<Category> categoryList;
-    private static Store storeInstance;
 
     private Store() {
         categoryList = new ArrayList<>();
     }
 
+    private static class StoreHolder {
+        private static final Store store = new Store();
+    }
+
     public static Store getInstance() {
-        if (storeInstance == null) {
-            storeInstance = new Store();
-        }
-        return storeInstance;
+        return StoreHolder.store;
     }
 
     public static void clear() {
-        if (storeInstance != null) {
-            storeInstance.categoryList.clear();
-        }
+        StoreHolder.store.categoryList.clear();
     }
 
     public List<Category> getCategoryList() {
