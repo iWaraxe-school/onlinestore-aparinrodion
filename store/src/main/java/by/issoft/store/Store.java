@@ -6,13 +6,17 @@ import by.issoft.domain.Product;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 public class Store {
     private final List<Category> categoryList;
+    private final List<Product> purchasedGoods;
+
 
     private Store() {
         categoryList = new ArrayList<>();
+        purchasedGoods = new CopyOnWriteArrayList<>();
     }
 
     private static class StoreHolder {
@@ -25,6 +29,19 @@ public class Store {
 
     public static void clear() {
         StoreHolder.store.categoryList.clear();
+        clearPurchasedGoods();
+    }
+
+    public static void clearPurchasedGoods() {
+        StoreHolder.store.purchasedGoods.clear();
+    }
+
+    public void addPurchasedItem(Product product) {
+        purchasedGoods.add(product);
+    }
+
+    public List<Product> getPurchasedGoods() {
+        return purchasedGoods;
     }
 
     public List<Category> getCategoryList() {
@@ -38,6 +55,14 @@ public class Store {
     public String getSortedStore(Comparator<Product> comparator) {
         StringBuilder stringBuilder = new StringBuilder("Store:\n");
         categoryList.forEach(category -> stringBuilder.append(category.getSortedProducts(comparator)));
+        return stringBuilder.toString();
+    }
+
+    public String getAllCategories() {
+        StringBuilder stringBuilder = new StringBuilder("Store categories:\n");
+        for (int i = 0; i < categoryList.size(); i++) {
+            stringBuilder.append(i + 1).append(" - ").append(categoryList.get(i).getName()).append("\n");
+        }
         return stringBuilder.toString();
     }
 
