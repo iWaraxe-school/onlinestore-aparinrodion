@@ -6,13 +6,10 @@ import by.issoft.store.Store;
 import by.issoft.store.productComparatorUtil.ProductComparatorUtil;
 import by.issoft.store.threadsCreatorUtil.ThreadCreatorUtil;
 import by.issoft.store.xmlReader.XMLReader;
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.InputStream;
 import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
-import java.util.concurrent.*;
 
 
 public class ConsoleReader {

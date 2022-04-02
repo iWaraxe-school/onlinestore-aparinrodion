@@ -1,5 +1,8 @@
 package by.issoft.domain;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode
 public class Product {
     private final String name;
     private final Double rate;
