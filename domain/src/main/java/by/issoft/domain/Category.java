@@ -1,10 +1,13 @@
 package by.issoft.domain;
 
+import lombok.EqualsAndHashCode;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@EqualsAndHashCode
 public class Category {
     private final String name;
     private final List<Product> productList;
