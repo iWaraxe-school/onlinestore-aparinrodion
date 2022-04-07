@@ -1,10 +1,10 @@
 package by.issoft.store;
 
-import by.issoft.domain.Category;
 import by.issoft.domain.Product;
 import by.issoft.store.repositories.CategoryRepository;
 import by.issoft.store.repositories.ProductRepository;
 
+import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -41,8 +41,12 @@ public class Store {
         return purchasedGoods;
     }
 
-    public List<Category> getCategoryList() {
-        return categoryRepository.getCategories();
+    public Product getProductByName(String productName) {
+        return productRepository.getProductByName(productName);
+    }
+
+    public List<Product> getAllProductByCategory(String categoryName) {
+        return productRepository.getAllProductsByCategory(categoryName);
     }
 
     public String getSortedStore(Comparator<Product> comparator) {
@@ -53,10 +57,8 @@ public class Store {
 
     public String getAllCategories() {
         StringBuilder stringBuilder = new StringBuilder("Store categories:\n");
-        List<Category> categoryList = categoryRepository.getCategories();
-        for (int i = 0; i < categoryList.size(); i++) {
-            stringBuilder.append(i + 1).append(" - ").append(categoryList.get(i).getName()).append("\n");
-        }
+        categoryRepository.getCategories()
+                .forEach(category -> stringBuilder.append(category.getName()).append("\n"));
         return stringBuilder.toString();
     }
 

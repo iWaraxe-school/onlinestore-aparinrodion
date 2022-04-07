@@ -17,12 +17,20 @@ public class ThreadCreatorUtil {
     private final ScheduledExecutorService periodExecutor;
     private final Store store;
     private final Random random;
+    private static ThreadCreatorUtil instance;
 
-    public ThreadCreatorUtil(Store store) {
+    private ThreadCreatorUtil(Store store) {
         periodExecutor = Executors.newSingleThreadScheduledExecutor();
         delayExecutor = Executors.newScheduledThreadPool(POOL_SIZE);
         this.store = store;
         random = new Random();
+    }
+
+    public static ThreadCreatorUtil getInstance(Store store) {
+        if (instance == null) {
+            instance = new ThreadCreatorUtil(store);
+        }
+        return instance;
     }
 
     public void createAddingProductThread(Product purchasedProduct) {

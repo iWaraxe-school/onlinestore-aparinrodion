@@ -32,7 +32,9 @@ public class CategoryRepository {
         List<String> categoriesList = new ArrayList<>();
         while (resultSet.next()) {
             categoriesList.add(resultSet.getString("name"));
+
         }
+        connection.close();
         return categoriesList;
     }
 
@@ -42,6 +44,7 @@ public class CategoryRepository {
         PreparedStatement preparedStatement = connection.prepareStatement(ADD_CATEGORY);
         preparedStatement.setString(1, categoryName);
         preparedStatement.executeUpdate();
+        connection.close();
     }
 
     public List<Category> getCategories() {

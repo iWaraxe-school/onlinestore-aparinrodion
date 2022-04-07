@@ -8,6 +8,7 @@ import com.github.javafaker.Faker;
 import org.reflections.Reflections;
 
 import java.lang.reflect.InvocationTargetException;
+import java.sql.SQLException;
 import java.util.Random;
 import java.util.Set;
 
@@ -37,16 +38,16 @@ public class DatabasePopulator {
         for (Class<? extends Category> category : categories
         ) {
             try {
-                Category temp = category.getDeclaredConstructor().newInstance();
-                categoryRepository.addCategory(temp.getName());
-                addProductsByCategory(temp.getName(), random.nextInt(BOUND) + LOWER_BOUND);
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                Category categoryInstance = category.getDeclaredConstructor().newInstance();
+                categoryRepository.addCategory(categoryInstance.getName());
+                addProductsByCategory(categoryInstance.getName(), random.nextInt(BOUND) + LOWER_BOUND);
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | SQLException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void addProductsByCategory(String category, int num) {
+    private void addProductsByCategory(String category, int num) throws SQLException {
         for (int i = 0; i < num; i++) {
             productRepository.addProduct(new Product(generateProductName(category),
                     faker.number().randomDouble(1, 0, 10),

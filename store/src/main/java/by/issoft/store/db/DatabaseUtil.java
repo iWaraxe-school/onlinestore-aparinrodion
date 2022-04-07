@@ -31,5 +31,6 @@ public class DatabaseUtil {
         statement.executeUpdate(CREATE_PRODUCTS);
         DatabasePopulator databasePopulator = new DatabasePopulator();
         databasePopulator.fillDatabase();
+        connection.close();
     }
 }

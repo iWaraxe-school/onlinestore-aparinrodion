@@ -1,21 +1,28 @@
 package by.issoft.consoleApp;
 
-import by.issoft.domain.Category;
-import by.issoft.domain.Product;
 import by.issoft.store.Store;
-import by.issoft.store.productComparatorUtil.ProductComparatorUtil;
+import by.issoft.store.httpServer.StoreHttpServer;
 import by.issoft.store.threadsCreatorUtil.ThreadCreatorUtil;
-import by.issoft.store.xmlReader.XMLReader;
+import lombok.SneakyThrows;
+import org.apache.http.HttpEntity;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.Credentials;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
-import java.io.InputStream;
-import java.util.List;
+import java.io.IOException;
 import java.util.Scanner;
 
-
 public class ConsoleReader {
-    private final Store store;
     private final Scanner scanner;
-    private final ThreadCreatorUtil threadCreatorUtil;
+    private CloseableHttpClient client;
 
     private final String SORT_COMMAND = "sort";
     private final String SORT_COMMAND_DESCRIPTION = "Print sorted products";
@@ -30,26 +37,24 @@ public class ConsoleReader {
             + "- " + ORDER_COMMAND + "\n"
             + "- " + QUIT_COMMAND;
 
-    public ConsoleReader(Store store, InputStream inputStream) {
-        this.store = store;
-        scanner = new Scanner(inputStream);
-        threadCreatorUtil = new ThreadCreatorUtil(store);
+    public ConsoleReader() {
+        scanner = new Scanner(System.in);
     }
 
+    @SneakyThrows
     public void start() {
         boolean messageIsNotExit = true;
-        threadCreatorUtil.createClearingPurchasedGoodsThread();
+        ThreadCreatorUtil.getInstance(Store.getInstance()).createClearingPurchasedGoodsThread();
         while (messageIsNotExit) {
             System.out.println(commandsInfo);
             String message = scanner.nextLine();
             switch (message) {
                 case SORT_COMMAND: {
-                    System.out.print(store
-                            .getSortedStore(ProductComparatorUtil.createComparator(XMLReader.getSortingRulesFromXML())));
+                    System.out.println(executeGetRequest(StoreHttpServer.SORT_URL));
                     break;
                 }
                 case TOP_COMMAND: {
-                    System.out.print(store.getTopFiveByPrice());
+                    System.out.println(executeGetRequest(StoreHttpServer.TOP_URL));
                     break;
                 }
                 case ORDER_COMMAND: {
@@ -68,28 +73,34 @@ public class ConsoleReader {
         }
     }
 
+    @SneakyThrows
     private void createOrder() {
-        System.out.print("Choose category or quit:\n" + store.getAllCategories());
-        String message = scanner.nextLine();
-        if (!QUIT_COMMAND.equals(message)) {
-            try {
-                int numOfCategory = Integer.parseInt(message);
-                Category category = store.getCategoryList().get(numOfCategory - 1);
-                System.out.println("Choose product or quit:");
-                List<Product> productList = category.getSortedProductsList(
-                        ProductComparatorUtil.createComparator(XMLReader.getSortingRulesFromXML()));
-                for (int i = 0; i < productList.size(); i++) {
-                    System.out.println(i + 1 + " - " + productList.get(i));
-                }
-                message = scanner.nextLine();
-                if (!QUIT_COMMAND.equals(message)) {
-                    int numOfProduct = Integer.parseInt(message);
-                    Product purchasedProduct = productList.get(numOfProduct - 1);
-                    threadCreatorUtil.createAddingProductThread(purchasedProduct);
-                }
-            } catch (NumberFormatException | IndexOutOfBoundsException exception) {
-                System.out.println("Wrong input");
-            }
+        System.out.print("Choose category or quit:\n" + executeGetRequest(StoreHttpServer.CATEGORIES_URL));
+        String categoryName = scanner.nextLine();
+        if (!QUIT_COMMAND.equals(categoryName)) {
+            System.out.println(executeGetRequest(StoreHttpServer.PRODUCTS_URL + categoryName));
+            String productName = scanner.nextLine();
+            HttpPost httpPost = new HttpPost(StoreHttpServer.CART_URL);
+            httpPost.setEntity(new StringEntity(productName));
+            client = createClient();
+            client.execute(httpPost);
+            client.close();
         }
+    }
+
+    private CloseableHttpClient createClient() {
+        CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+        Credentials credentials = new UsernamePasswordCredentials("username", "password");
+        credentialsProvider.setCredentials(AuthScope.ANY, credentials);
+        return HttpClients.custom().setDefaultCredentialsProvider(credentialsProvider).build();
+    }
+
+    private String executeGetRequest(String path) throws IOException {
+        HttpGet httpGet = new HttpGet(path);
+        client = createClient();
+        HttpEntity entity = client.execute(httpGet).getEntity();
+        String response = EntityUtils.toString(entity);
+        client.close();
+        return response;
     }
 }
