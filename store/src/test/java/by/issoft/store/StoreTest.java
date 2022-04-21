@@ -1,7 +1,6 @@
 package by.issoft.store;
 
 import by.issoft.domain.Product;
-import by.issoft.store.repositories.CategoryRepository;
 import by.issoft.store.repositories.ProductRepository;
 import org.junit.jupiter.api.Test;
 
@@ -18,13 +17,6 @@ class StoreTest {
         Store store1 = Store.getInstance();
         Store store2 = Store.getInstance();
         assertEquals(store1, store2);
-    }
-
-    @Test
-    void Get_category_list() {
-        Store store = Store.getInstance();
-        CategoryRepository categoryRepository = new CategoryRepository();
-        assertEquals(store.getCategoryList(), categoryRepository.getCategories());
     }
 
     @Test
